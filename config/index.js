@@ -6,20 +6,17 @@ const path = require('path')
 
 module.exports = {
   dev: {
+    assetsSubDirectory: 'static',
+    assetsPublicPath: '/',
     proxyTable: {
-      '/api': {
-        target: '192.168.8.83:80/', //接口域名 
+      '/': {
+        target: 'http://60.205.203.130:8082',
         changeOrigin: true, //是否跨域
         pathRewrite: {
-          '^api': '' //需要rewrite重写的
+          '^/': '' //需要rewrite重写的
         }
       }
     },
-    // Paths
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-    proxyTable: {},
-
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined

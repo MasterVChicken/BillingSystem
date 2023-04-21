@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 const layout = () => import('@/components/layout')
 // 登录页
-const reload = () => import('@/components/reLoad')
+const login = () => import('@/views/login/index')
 
 const main = () => import('@/views/index')
 const table = () => import('@/views/example/table/index')
@@ -13,7 +13,7 @@ Vue.use(Router)
 // 固定的路由表
 export const fixedRouter = [{
     path: '',
-    component: reload,
+    component: login,
     hidden: true
   },
   {
@@ -24,7 +24,7 @@ export const fixedRouter = [{
       component: main,
       meta: {
         title: '首页', //菜单名称
-        roles: ['user', 'admin'], //当前菜单哪些角色可以看到
+        roles: ['stu', 'admin'], //当前菜单哪些角色可以看到
         icon: 'el-icon-info' //菜单左侧的icon图标
       }
     }]
@@ -38,7 +38,7 @@ export const permissionRouter = [{
   meta: {
     title: "案例",
     icon: "el-icon-success",
-    roles: ['admin', 'user']
+    roles: ['admin', 'stu']
   },
   children: [{
       path: "/example/table",
@@ -80,7 +80,7 @@ export const permissionRouter = [{
       meta: {
         title: "树形菜单",
         icon: "el-icon-upload",
-        roles: ['user', 'admin']
+        roles: ['stu', 'admin']
       }
     }
   ]
@@ -89,5 +89,4 @@ export const permissionRouter = [{
 
 export default new Router({
   routes: fixedRouter
-
 })
