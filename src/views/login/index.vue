@@ -50,19 +50,13 @@ export default {
             type:'success',
             message:'登陆成功'
           })
-          localStorage.setItem('userRole', 'admin')
+          this.$store.dispatch('login',response.data)
+          localStorage.setItem('userRole', this.$store.state.useRole)
           this.$router.push({
             path: '/main'
           })
         }
       })
-
-      // let getUserRole = this.UserForm.user === 'admin' ? 'admin' : 'user'
-      // localStorage.setItem('userRole', getUserRole)
-      // // window.location.href="/main"
-      // this.$router.push({
-      //   path: '/main'
-      // })
     }
   },
   mounted() {
