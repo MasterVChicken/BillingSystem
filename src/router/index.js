@@ -1,8 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 const layout = () => import('@/components/layout')
 // 登录页
 const login = () => import('@/views/login/index')
+const teacher = () => import('@/views/dashboard/teacher')
+const stu = () => import('@/views/dashboard/stu')
+const finance = () => import('@/views/dashboard/finance')
+const admin = () => import('@/views/dashboard/admin')
+
+const teacherPermission = () => import('@/views/permission/teacherPermission')
 
 const main = () => import('@/views/index')
 const table = () => import('@/views/example/table/index')
@@ -11,7 +18,8 @@ const tableFirst = () => import('@/views/example/table/tableFirst')
 const tableSecond = () => import('@/views/example/table/tableSecond')
 Vue.use(Router)
 // 固定的路由表
-export const fixedRouter = [{
+export const fixedRouter = [
+  {
     path: '',
     component: login,
     hidden: true
@@ -31,16 +39,17 @@ export const fixedRouter = [{
   },
 ]
 // 需要权限判断展示的路由
-export const permissionRouter = [{
-  path: "/example",
-  component: layout,
-  name: "Example",
-  meta: {
-    title: "案例",
-    icon: "el-icon-success",
-    roles: ['admin', 'stu']
-  },
-  children: [{
+export const permissionRouter = [
+  {
+    path: "/example",
+    component: layout,
+    name: "Example",
+    meta: {
+      title: "案例",
+      icon: "el-icon-success",
+      roles: ['admin', 'stu']
+    },
+    children: [{
       path: "/example/table",
       name: "Table",
       component: table,
@@ -51,16 +60,16 @@ export const permissionRouter = [{
       },
       // 三级菜单写法，对应demotable案例下边的两个菜单
       children: [{
-          path: "table1",
-          name: "Table1",
-          component: tableFirst,
-          meta: {
-            title: "table1",
-            icon: "el-icon-mobile-phone",
-            roles: ['admin']
+        path: "table1",
+        name: "Table1",
+        component: tableFirst,
+        meta: {
+          title: "table1",
+          icon: "el-icon-mobile-phone",
+          roles: ['admin']
 
-          }
-        },
+        }
+      },
         {
           path: "table2",
           name: "Table2",
@@ -73,18 +82,93 @@ export const permissionRouter = [{
         }
       ]
     },
-    {
-      path: "tree",
-      name: "Tree",
-      component: tree,
-      meta: {
-        title: "树形菜单",
-        icon: "el-icon-upload",
-        roles: ['stu', 'admin']
+      {
+        path: "tree",
+        name: "Tree",
+        component: tree,
+        meta: {
+          title: "树形菜单",
+          icon: "el-icon-upload",
+          roles: ['stu', 'admin']
+        }
       }
-    }
-  ]
-}]
+    ]
+  },
+  {
+    path: "/dashboard",
+    component: layout,
+    name: "Dashboard",
+    meta: {
+      title: "主页",
+      icon: "el-icon-success",
+      roles: ['admin', 'stu', 'teacher', 'finance', 'stu_assit']
+    },
+    children: [
+      {
+        path: "teacher",
+        name: "Teacher",
+        component: teacher,
+        meta: {
+          title: "教师主页",
+          icon: "el-icon-upload",
+          roles: ['teacher']
+        }
+      },
+      {
+        path: "stu",
+        name: "Student",
+        component: stu,
+        meta: {
+          title: "学生主页",
+          icon: "el-icon-upload",
+          roles: ['stu','stu_assit']
+        }
+      },
+      {
+        path: "finance",
+        name: "Finance",
+        component: finance,
+        meta: {
+          title: "财务人员主页",
+          icon: "el-icon-upload",
+          roles: ['finance']
+        }
+      },
+      {
+        path: "admin",
+        name: "Admin",
+        component: admin,
+        meta: {
+          title: "管理员主页",
+          icon: "el-icon-upload",
+          roles: ['admin']
+        }
+      }
+    ]
+  },
+  {
+    path: "/permission",
+    component: layout,
+    name: "Permission",
+    meta: {
+      title: "权限管理",
+      icon: "el-icon-success",
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: "teacherPermission",
+        name: "TeacherPermission",
+        component: teacherPermission,
+        meta: {
+          title: "教师权限管理",
+          icon: "el-icon-upload",
+          roles: ['admin']
+        }
+      }
+    ]
+  },
+]
 
 
 export default new Router({

@@ -5,7 +5,7 @@
         <el-input v-model="UserForm.user"></el-input>
       </el-form-item>
       <el-form-item label="密码:">
-        <el-input v-model="UserForm.password" type="password"></el-input>
+        <el-input v-model="UserForm.password" type="password"  @keyup.enter.native="login"></el-input>
       </el-form-item>
       <el-form-item align="center">
         <el-button @click="login" type="primary" plain> 登录</el-button>
@@ -52,9 +52,26 @@ export default {
           })
           this.$store.dispatch('login',response.data)
           localStorage.setItem('userRole', this.$store.state.useRole)
-          this.$router.push({
-            path: '/main'
-          })
+          // this.$router.push({
+          //   path: '/main'
+          // })
+          if(localStorage.getItem('userRole') === 'teacher'){
+            this.$router.push({
+              path: '/dashboard/teacher'
+            })
+          }else if(localStorage.getItem('userRole') === 'admin'){
+            this.$router.push({
+              path: '/dashboard/admin'
+            })
+          }else if(localStorage.getItem('userRole')==='finance'){
+            this.$router.push({
+              path: '/dashboard/finance'
+            })
+          }else if(localStorage.getItem('userRole')==='stu' || localStorage.getItem('userRole')==='stu_assit'){
+            this.$router.push({
+              path: '/dashboard/stu'
+            })
+          }
         }
       })
     }
