@@ -117,12 +117,12 @@ export default {
       },
       rules: {
         pass: [
-          { validator: validatePass, trigger: 'blur' },
-          {min:8, max:16,message: '用户密码长度必须介于 6 和 18 之间', trigger: 'blur'}
+          {validator: validatePass, trigger: 'blur'},
+          {min: 6, max: 18, message: '用户密码长度必须介于 6 和 18 之间', trigger: 'blur'}
         ],
         checkPass: [
-          { validator: validatePass2, trigger: 'blur' },
-          {min:8, max:16,message: '用户密码长度必须介于 6 和 18 之间', trigger: 'blur'}
+          {validator: validatePass2, trigger: 'blur'},
+          {min: 6, max: 18, message: '用户密码长度必须介于 6 和 18 之间', trigger: 'blur'}
         ]
       }
     }
@@ -157,7 +157,8 @@ export default {
           if (response.data === 0) {
             this.$message({
               type: 'warning',
-              message: '重置出现错误'
+              message: '重置出现错误',
+              duration: 2000
             })
           }
         })
@@ -174,18 +175,21 @@ export default {
           this.resetPWD(this.selectedUser)
           this.$message({
             type: 'success',
-            message: '重置成功!'
+            message: '重置成功!',
+            duration: 2000
           })
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消重置'
+            message: '已取消重置',
+            duration: 2000
           })
         });
       } else {
         this.$message({
           type: 'warning',
-          message: '还没有选中人员哦'
+          message: '还没有选中人员哦',
+          duration: 2000
         })
       }
     },
@@ -202,7 +206,8 @@ export default {
       if (this.rowData.t_power === this.PowerForm.power) {
         this.$message({
           type: "error",
-          message: "权限与之前的相同，未进行更改"
+          message: "权限与之前的相同，未进行更改",
+          duration: 2000
         })
       } else {
         let params = new URLSearchParams()
@@ -217,12 +222,14 @@ export default {
           if (response.data === 1) {
             this.$message({
               type: "success",
-              message: "权限修改成功"
+              message: "权限修改成功",
+              duration: 2000
             })
           } else {
             this.$message({
               type: "error",
-              message: "权限失败"
+              message: "权限失败",
+              duration: 2000
             })
           }
         })
@@ -235,10 +242,37 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // axios.post('/admin/update')
-          this.$message.success('修改成功')
+          let params = new URLSearchParams()
+          params.append('T_id', this.rowData.t_id)
+          params.append('T_pwd', this.ruleForm.pass)
+          axios.post('/teacher/update/pwd', params, {
+            headers: {
+              'Access-Control-Allow-Credentials': 'true', //解决session问题
+              'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
+            }
+          }).then((response) => {
+            if (response.data === 1) {
+              this.$message({
+                type: "success",
+                message: "密码修改成功",
+                duration: 2000
+              })
+            } else {
+              this.$message({
+                type: "error",
+                message: "密码修改失败失败",
+                duration: 2000
+              })
+            }
+          })
+          this.PWDdialogFormVisible = false
         } else {
-          console.log('错误的提交!!');
+          this.$message({
+            type:'error',
+            message:'错误的提交',
+            duration: 2000
+          })
+          this.dialogFormVisible = false
           return false;
         }
       });
