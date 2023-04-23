@@ -2,8 +2,10 @@
   <div class="app_wapper">
     <el-container>
       <!-- 左侧菜单 -->
+      <!--如果要修改侧边栏的宽度，请注意下方的CSS-->
       <el-aside class="slider_container">
-        <el-menu class="sub_meuns_wapper" mode="vertical" unique-opened :default-active="$route.path" background-color="#304156" text-color="#fff" active-text-color="#409EFF">
+        <el-menu class="sub_meuns_wapper" mode="vertical" unique-opened :default-active="$route.path"
+                 background-color="#304156" text-color="#fff" active-text-color="#409EFF">
           <!-- 菜单组件 -->
           <side-Meuns :routes="getRoutes"></side-Meuns>
         </el-menu>
@@ -17,7 +19,7 @@
         <!-- 内容区域 -->
         <el-main>
           <!-- 二级路由跳转 -->
-          <router-view />
+          <router-view/>
         </el-main>
       </el-container>
     </el-container>
@@ -26,7 +28,8 @@
 <script>
 // 左侧菜单组件
 import sideMeuns from '@/components/sideMeuns'
-import { permissionRouter } from '@/router'
+import {permissionRouter} from '@/router'
+
 export default {
   computed: {
     getRoutes() {
@@ -82,7 +85,7 @@ export default {
 .slider_container .el-menu {
   color: #333;
   transition: width .28s;
-  width: 180px !important;
+  width: 300px !important;
   height: 100%;
   position: fixed;
   top: 0;

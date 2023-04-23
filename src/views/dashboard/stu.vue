@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display: flex; align-items: center; flex-direction: column">
     <el-descriptions title="用户信息">
       <el-descriptions-item label="用户名">{{this.userInfo.s_name}}</el-descriptions-item>
       <el-descriptions-item label="统一认证码">{{this.$store.getters.getUserID}}</el-descriptions-item>
@@ -37,6 +37,8 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <el-button type="text" @click="openConfirm">签订银行卡自动扣款协议</el-button>
+    <el-button type="text" @click="openCancel">取消签订银行卡自动扣款协议</el-button>
   </div>
 </template>
 
@@ -68,6 +70,7 @@ export default {
     return {
       PWDdialogFormVisible: false,
       BankIDdialogFormVisible: false,
+      autoFlag: false,
       ruleForm: {
         pass: '',
         checkPass: ''
@@ -159,6 +162,7 @@ export default {
           }else{
             this.$message.success('修改银行卡号成功')
           }
+          this.BankIDdialogFormVisible = false
           this.BankForm.bank = ''
         })
       }
@@ -187,6 +191,77 @@ export default {
         this.userInfo.s_sex = response.data.s_sex
         localStorage.setItem('S_no',response.data.s_no)
       })
+    },
+    changeBindStatus(){
+      console.log(this.autoFlag)
+    },
+    openConfirm(){
+      this.$confirm('此操作将签订银行卡自动扣款协议, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = new URLSearchParams()
+        params.append('S_no',localStorage.getItem('S_no'))
+        params.append('flag',1)
+        axios.post('/student/update/bank_xieyi',params,{
+          headers: {
+            'Access-Control-Allow-Credentials': 'true', //解决session问题
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
+          }
+        }).then((response)=>{
+          if(response.data === 1){
+            this.$message({
+              type: 'success',
+              message: '签订成功!'
+            });
+          }else{
+            this.$message({
+              type: 'error',
+              message: '签订操作失败!'
+            });
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消操作'
+        });
+      });
+    },
+    openCancel(){
+      this.$confirm('此操作将取消签订银行卡自动扣款协议, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = new URLSearchParams()
+        params.append('S_no',localStorage.getItem('S_no'))
+        params.append('flag',0)
+        axios.post('/student/update/bank_xieyi',params,{
+          headers: {
+            'Access-Control-Allow-Credentials': 'true', //解决session问题
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
+          }
+        }).then((response)=>{
+          if(response.data === 1){
+            this.$message({
+              type: 'success',
+              message: '取消签订成功!'
+            });
+          }else{
+            this.$message({
+              type: 'error',
+              message: '取消签订操作失败!'
+            });
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消操作'
+        });
+      });
     }
   },
   created() {

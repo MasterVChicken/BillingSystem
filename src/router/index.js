@@ -9,7 +9,13 @@ const stu = () => import('@/views/dashboard/stu')
 const finance = () => import('@/views/dashboard/finance')
 const admin = () => import('@/views/dashboard/admin')
 
-const basicPayment = () => import('@/views/stuPayment/basicPayment')
+const basicPayment = () => import('@/views/stuPayment/payment/basicPayment')
+
+const receiptInquiry = () => import('@/views/stuPayment/receiptInquiry')
+
+const loanInquiry = () => import('@/views/stuPayment/loanInquiry')
+
+const otherInquiry = () => import('@/views/stuPayment/otherInquiry')
 
 const teacherPermission = () => import('@/views/permission/teacherPermission')
 
@@ -186,6 +192,36 @@ export const permissionRouter = [
         component: basicPayment,
         meta: {
           title: "学生基础缴费",
+          icon: "el-icon-upload",
+          roles: ['stu','stu_assit']
+        }
+      },
+      {
+        path: "receiptInquiry",
+        name: "ReceiptInquiry",
+        component: receiptInquiry,
+        meta: {
+          title: "学生收据查询",
+          icon: "el-icon-upload",
+          roles: ['stu','stu_assit']
+        }
+      },
+      {
+        path: "loanInquiry",
+        name: "LoanInquiry",
+        component: loanInquiry,
+        meta: {
+          title: "学生贷款查询",
+          icon: "el-icon-upload",
+          roles: ['stu','stu_assit']
+        }
+      },
+      {
+        path: "otherInquiry",
+        name: "OtherInquiry",
+        component: otherInquiry,
+        meta: {
+          title: "学生其他费用查询",
           icon: "el-icon-upload",
           roles: ['stu','stu_assit']
         }
