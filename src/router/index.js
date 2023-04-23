@@ -9,6 +9,8 @@ const stu = () => import('@/views/dashboard/stu')
 const finance = () => import('@/views/dashboard/finance')
 const admin = () => import('@/views/dashboard/admin')
 
+const basicPayment = () => import('@/views/stuPayment/basicPayment')
+
 const teacherPermission = () => import('@/views/permission/teacherPermission')
 
 const main = () => import('@/views/index')
@@ -164,6 +166,28 @@ export const permissionRouter = [
           title: "教师权限管理",
           icon: "el-icon-upload",
           roles: ['admin']
+        }
+      }
+    ]
+  },
+  {
+    path: "/stuPayment",
+    component: layout,
+    name: "StuPayment",
+    meta: {
+      title: "学生缴费",
+      icon: "el-icon-success",
+      roles: ['stu','stu_assit']
+    },
+    children: [
+      {
+        path: "basicPayment",
+        name: "BasicPayment",
+        component: basicPayment,
+        meta: {
+          title: "学生基础缴费",
+          icon: "el-icon-upload",
+          roles: ['stu','stu_assit']
         }
       }
     ]

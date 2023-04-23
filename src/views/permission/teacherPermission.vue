@@ -236,9 +236,6 @@ export default {
       }
       this.dialogFormVisible = false
     },
-    changeUserPWD() {
-
-    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {

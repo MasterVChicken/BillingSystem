@@ -51,10 +51,7 @@ export default {
             message:'登陆成功'
           })
           this.$store.dispatch('login',response.data)
-          localStorage.setItem('userRole', this.$store.state.useRole)
-          // this.$router.push({
-          //   path: '/main'
-          // })
+          localStorage.setItem('userRole', this.$store.getters.getUserRole)
           if(localStorage.getItem('userRole') === 'teacher'){
             this.$router.push({
               path: '/dashboard/teacher'
