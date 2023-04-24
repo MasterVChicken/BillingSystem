@@ -10,7 +10,7 @@
       </el-table-column>
     </el-table>
     <el-dialog title="班级缴费情况查询" :visible.sync="classVisible">
-      <el-select placeholder="请选择查询学年" ref="mySelect" @change="changeSelect">
+      <el-select placeholder="请选择查询学年" ref="mySelect" @change="changeSelect" v-model="value">
         <el-option label="2022-2023" value="2022-2023"></el-option>
         <el-option label="2021-2022" value="2021-2022"></el-option>
         <el-option label="2020-2021" value="2020-2021"></el-option>

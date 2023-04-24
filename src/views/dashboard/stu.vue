@@ -39,9 +39,6 @@
     </el-dialog>
     <el-button type="text" @click="openConfirm">签订银行卡自动扣款协议</el-button>
     <el-button type="text" @click="openCancel">取消签订银行卡自动扣款协议</el-button>
-    <el-table v-if="this.userInfo.s_power" :data="this.classList" title="管理班级">
-      <el-table-column prop="class_id" align="center"></el-table-column>
-    </el-table>
   </div>
 </template>
 
@@ -163,8 +160,10 @@ export default {
         }).then((response)=>{
           if(response.data === 0){
             this.$message.error('修改银行卡号失败')
-          }else{
+          }else if(response.data === 1){
             this.$message.success('修改银行卡号成功')
+          }else if(response.data === -1){
+            this.$message.error('请检查卡号是否正确')
           }
           this.BankIDdialogFormVisible = false
           this.BankForm.bank = ''

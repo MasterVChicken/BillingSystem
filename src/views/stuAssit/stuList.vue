@@ -15,7 +15,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="增添收费项" :visible.sync="FeedialogFormVisible">
+    <el-dialog title="增添收费项" :visible.sync="FeedialogFormVisible" before-destroy="destroyFee">
       <el-form :model="FeeForm" status-icon ref="FeeForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="学年" prop="year">
           <el-select v-model="FeeForm.year" placeholder="请选择对应的年份" @change="getSelectedYear">
@@ -39,8 +39,8 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog title="学生缴费情况查询" :visible.sync="getStuVisible">
-      <el-select placeholder="请选择查询学年" ref="mySelect" @change="changeSelect">
+    <el-dialog title="学生缴费情况查询" :visible.sync="getStuVisible" before-close="destroyStu">
+      <el-select placeholder="请选择查询学年" ref="mySelect" @change="changeSelect" v-model="value">
         <el-option label="2022-2023" value="2022-2023"></el-option>
         <el-option label="2021-2022" value="2021-2022"></el-option>
         <el-option label="2020-2021" value="2020-2021"></el-option>
@@ -82,16 +82,16 @@ export default {
         remark: '',
         fee: ''
       },
-      stu_name:'',
-      stu_year:'',
-      singleList:{
+      stu_name: '',
+      stu_year: '',
+      singleList: {
         class_name: '',
         year: '',
-        class_id:'',
-        flag:'',
-        s_no:'',
-        s_grade:'',
-        s_name:''
+        class_id: '',
+        flag: '',
+        s_no: '',
+        s_grade: '',
+        s_name: ''
       }
     }
   },
@@ -122,17 +122,17 @@ export default {
       this.FeeForm.year = val
     },
     submitForm(formName) {
-      if(this.selectedUser === []){
+      if (this.selectedUser === []) {
         this.$message.error('请选中需要添加收费款项的学生')
         this.FeedialogFormVisible = false
-      }else{
-        this.selectedUser.forEach((item)=>{
+      } else {
+        this.selectedUser.forEach((item) => {
           let params = new URLSearchParams()
-          params.append('S_no',item)
-          params.append('year',this.FeeForm.year)
-          params.append('remark',this.FeeForm.remark)
-          params.append('fee',this.FeeForm.fee)
-          axios.post('/student/manager/insert',params,{
+          params.append('S_no', item)
+          params.append('year', this.FeeForm.year)
+          params.append('remark', this.FeeForm.remark)
+          params.append('fee', this.FeeForm.fee)
+          axios.post('/student/manager/insert', params, {
             headers: {
               'Access-Control-Allow-Credentials': 'true', //解决session问题
               'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
@@ -146,36 +146,55 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    openStu(data){
+    openStu(data) {
       this.stu_name = data
       this.getStuVisible = true
     },
-    getStu(){
+    getStu() {
       let params = new URLSearchParams()
-      params.append('S_no',localStorage.getItem('S_no'))
-      params.append('S_name',this.stu_name)
-      params.append('year',this.stu_year)
-      axios.post('/student/find/student_name',params,{
+      params.append('S_no', localStorage.getItem('S_no'))
+      params.append('S_name', this.stu_name)
+      params.append('year', this.stu_year)
+      axios.post('/student/find/student_name', params, {
         headers: {
           'Access-Control-Allow-Credentials': 'true', //解决session问题
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
         }
-      }).then((response)=>{
-          this.singleList = response.data
+      }).then((response) => {
+        this.singleList = response.data
       })
     },
-    changeSelect(val){
+    changeSelect(val) {
       this.stu_year = val
       this.getStu()
     },
-    statusFormatter(row,column){
-      if(row.flag === 0){
+    statusFormatter(row, column) {
+      if (row.flag === 0) {
         return '已缴费'
-      }else{
-        return '未缴费项数:'+row.flag
+      } else {
+        return '未缴费项数:' + row.flag
       }
+    },
+    destroyStu(done) {
+      this.singleList = {
+        class_name: '',
+        year: '',
+        class_id: '',
+        flag: '',
+        s_no: '',
+        s_grade: '',
+        s_name: ''
+      }
+      done()
+    },
+    destroyFee(done) {
+      this.FeeForm = {
+        year: '',
+        remark: '',
+        fee: ''
+      }
+      done()
     }
-
   },
   created() {
     this.getData()
