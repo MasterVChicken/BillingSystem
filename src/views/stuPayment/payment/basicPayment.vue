@@ -1,60 +1,157 @@
 <template>
-<!--  <div>-->
-<!--    <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-bottom: 10px">-->
-<!--      <el-breadcrumb-item :to="{path:'/'}">首页</el-breadcrumb-item>-->
-<!--      <el-breadcrumb-item>教师权限管理</el-breadcrumb-item>-->
-<!--    </el-breadcrumb>-->
-<!--    <el-form :inline="true" class="user-search">-->
-<!--      <el-form-item label="简易搜索">-->
-<!--        <el-input size="small" v-model="searchByName" placeholder="输入用户名"></el-input>-->
-<!--      </el-form-item>-->
-<!--    </el-form>-->
-<!--    &lt;!&ndash;列表&ndash;&gt;-->
-<!--    <el-table size="small" @selection-change="selectChange"-->
-<!--              :data="paymentData.filter(data => !searchByName || data.t_name.includes(searchByName))"-->
-<!--              highlight-current-row-->
-<!--              v-loading="loading" border element-loading-text="拼命加载中" style="width: 100%;">-->
-<!--      <el-table-column align="center" type="selection" width="50">-->
-<!--      </el-table-column>-->
-<!--      <el-table-column align="center" sortable prop="year" label="学年" width="200">-->
-<!--      </el-table-column>-->
-<!--      <el-table-column align="center" sortable prop="t_name" label="姓名" width="200">-->
-<!--      </el-table-column>-->
-<!--      <el-table-column align="center" sortable prop="t_pos" label="职位" width="200">-->
-<!--      </el-table-column>-->
-<!--    </el-table>-->
-<!--  </div>-->
+  <div>
+    <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-bottom: 10px">
+      <el-breadcrumb-item :to="{path:'/'}">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>缴费基础管理</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-table size="small" :data="basicData" highlight-current-row style="width: 100%;" border :span-method="basicSpan" :summary-method="getSummaries" show-summary>
+      <el-table-column align="center" prop="year" label="学年" width="200">
+      </el-table-column>
+      <el-table-column align="center" prop="type" label="类型" width="200">
+      </el-table-column>
+      <el-table-column align="center" prop="money" label="金额" width="200">
+      </el-table-column>
+      <el-table-column align="center" prop="flag" label="是否缴纳" width="200" :formatter="flagFormatter">
+      </el-table-column>
+      <el-table-column align="center" label="缴费操作" width="200" prop="flag">
+        <template slot-scope="scope">
+          <el-button :disabled="(!scope.row.flag) || scope.row.type ==='其他费用'" @click="pay(scope.row)">缴费操作</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
+
 export default {
   name: "basicPayment",
-  data(){
-    return{
+  data() {
+    return {
       // searchByName: '',
-      basicData:{
-        year: '',
-        type: '',
-        money: '',
-        flag: ''
-      },
+      basicData: []
     }
   },
-  methods:{
-    getBasicData(){
+  methods: {
+
+    getBasicData() {
       let params = new URLSearchParams()
-      params.append('S_no',localStorage.getItem('S_no'))
-      axios.post('/student/find/feiyong',params,{
+      params.append('S_no', localStorage.getItem('S_no'))
+      axios.post('/student/find/feiyong', params, {
         headers: {
           'Access-Control-Allow-Credentials': 'true', //解决session问题
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
         }
-      }).then((response)=>{
-        console.log(localStorage.getItem('S_no'))
-        console.log(response)
+      }).then((response) => {
+        // 转换一下数据
+        for (let i = 0; i < response.data.length; i++) {
+          this.basicData.push({
+            'year': response.data[i].year,
+            'type': '学费',
+            'money': response.data[i].xuefei,
+            'flag': response.data[i].xuefeiflag
+          })
+          this.basicData.push({
+            'year': response.data[i].year,
+            'type': '住宿费',
+            'money': response.data[i].zhusufei,
+            'flag': response.data[i].zhusufeiflag
+          })
+          this.basicData.push({
+            'year': response.data[i].year,
+            'type': '其他费用',
+            'money': response.data[i].qitatotal,
+            'flag': response.data[i].qitaflag
+          })
+        }
       })
-    }
+    },
+    flagFormatter(row, column) {
+      if (row.flag === 0) {
+        return '已缴纳'
+      } else if (row.flag === 1) {
+        return '未缴纳'
+      }
+    },
+    basicSpan({row, column, rowIndex, columnIndex}) {
+      if (columnIndex === 0) {
+        if (rowIndex % 3 === 0) {
+          return {
+            rowspan: 3,
+            colspan: 1
+          }
+        } else if (rowIndex % 3 === 1 || rowIndex % 3 === 2) {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      }
+    },
+    pay(data) {
+      let params = new URLSearchParams()
+      let F_id = 0
+      if (data.type === '学费') {
+        F_id = 1
+      } else if (data.type === '住宿费') {
+        F_id = 2
+      }
+      params.append('S_no', localStorage.getItem('S_no'))
+      params.append('F_id', F_id)
+      params.append('money', data.money)
+      params.append('remark', data.type)
+      params.append('year', data.year)
+      axios.post('/student/tuijiaofei/jiaofei', params, {
+        headers: {
+          'Access-Control-Allow-Credentials': 'true', //解决session问题
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
+        }
+      }).then((response) => {
+        if (response.data === 1) {
+          this.$message.success('缴费成功')
+        } else if (response.data === 0) {
+          this.$message.error('缴费失败')
+        } else if (response.data === -1) {
+          this.$message.error('未开通自动扣款协议或银行卡余额不足')
+        }
+      })
+    },
+    getSummaries(param) {
+      const {columns, data} = param
+      const sums = []
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '总计';
+          return;
+        }
+        if (index === 1) {
+          sums[index] = '应缴';
+          return;
+        }
+        if (index === 3) {
+          sums[index] = '未缴';
+          return;
+        }
+        if(index === 2){
+          sums[2] = 0
+          for(let i = 0;i<param.data.length;i++){
+            sums[2] += Number(param.data[i].money)
+          }
+          sums[2] += '元'
+        }
+        if(index === 4){
+          sums[4] = 0
+          for(let i = 0;i<param.data.length;i++){
+            if(param.data[i].flag === 1){
+              sums[4] += param.data[i].money
+            }
+          }
+          sums[4] += '元'
+        }
+      });
+      return sums;
+    },
   },
   created() {
     this.getBasicData()

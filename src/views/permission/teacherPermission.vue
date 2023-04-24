@@ -142,7 +142,6 @@ export default {
       val.forEach(item => {
         this.selectedUser.push(item.t_id)
       })
-      console.log(this.selectedUser)
     },
     resetPWD(list) {
       list.forEach(pwd => {

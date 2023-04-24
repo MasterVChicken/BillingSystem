@@ -39,6 +39,9 @@
     </el-dialog>
     <el-button type="text" @click="openConfirm">签订银行卡自动扣款协议</el-button>
     <el-button type="text" @click="openCancel">取消签订银行卡自动扣款协议</el-button>
+    <el-table v-if="this.userInfo.s_power" :data="this.classList" title="管理班级">
+      <el-table-column prop="class_id" align="center"></el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -98,7 +101,8 @@ export default {
         s_power:'',
         s_age:'',
         s_sex:''
-      }
+      },
+      classList:[]
     }
   },
   methods: {
@@ -191,6 +195,14 @@ export default {
         this.userInfo.s_sex = response.data.s_sex
         localStorage.setItem('S_no',response.data.s_no)
       })
+      if(this.$store.getters.getUserRole === 'stu_assit'){
+        let params = '?S_no=' + localStorage.getItem('S_no')
+        axios.get('/student/find/class'+params).then((response)=>{
+          response.data.forEach((item)=>{this.classList.push({
+            'class_id':item
+          })})
+        })
+      }
     },
     changeBindStatus(){
       console.log(this.autoFlag)

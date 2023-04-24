@@ -11,11 +11,16 @@ const admin = () => import('@/views/dashboard/admin')
 
 const basicPayment = () => import('@/views/stuPayment/payment/basicPayment')
 
+const refund = () => import('@/views/stuPayment/refund/refund')
+
 const receiptInquiry = () => import('@/views/stuPayment/receiptInquiry')
 
 const loanInquiry = () => import('@/views/stuPayment/loanInquiry')
 
 const otherInquiry = () => import('@/views/stuPayment/otherInquiry')
+
+const stuList = () => import('@/views/stuAssit/stuList')
+const classList = () => import('@/views/stuAssit/classList')
 
 const teacherPermission = () => import('@/views/permission/teacherPermission')
 
@@ -191,7 +196,17 @@ export const permissionRouter = [
         name: "BasicPayment",
         component: basicPayment,
         meta: {
-          title: "学生基础缴费",
+          title: "学生缴费",
+          icon: "el-icon-upload",
+          roles: ['stu','stu_assit']
+        }
+      },
+      {
+        path: "refund",
+        name: "Refund",
+        component: refund,
+        meta: {
+          title: "学生退费",
           icon: "el-icon-upload",
           roles: ['stu','stu_assit']
         }
@@ -228,6 +243,36 @@ export const permissionRouter = [
       }
     ]
   },
+  {
+    path: "/stuAssit",
+    component: layout,
+    name: "StuAssit",
+    meta: {
+      title: "学生协助管理",
+      icon: "el-icon-success",
+      roles: ['stu_assit']
+    },
+    children: [{
+      path: "stuList",
+      name: "StuList",
+      component: stuList,
+      meta: {
+        title: "管理学生列表",
+        icon: "el-icon-upload",
+        roles: ['stu_assit']
+      }
+    },{
+      path: "classList",
+      name: "ClassList",
+      component: classList,
+      meta: {
+        title: "管理班级列表",
+        icon: "el-icon-upload",
+        roles: ['stu_assit']
+      }
+    }
+    ]
+  }
 ]
 
 
