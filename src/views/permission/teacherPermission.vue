@@ -196,7 +196,6 @@ export default {
       this.rowData.t_id = row.t_id
       this.rowData.t_name = row.t_name
       this.rowData.t_power = row.t_power
-      console.log(this.rowData)
     },
     getSelectedPower(val) {
       this.PowerForm.power = val

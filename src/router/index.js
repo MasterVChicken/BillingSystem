@@ -22,6 +22,10 @@ const otherInquiry = () => import('@/views/stuPayment/otherInquiry')
 const stuList = () => import('@/views/stuAssit/stuList')
 const classList = () => import('@/views/stuAssit/classList')
 
+const teaStuList = () => import('@/views/teacher/teaStuList')
+
+const teaClassList = () => import('@/views/teacher/teaClassList')
+
 const teacherPermission = () => import('@/views/permission/teacherPermission')
 
 const main = () => import('@/views/index')
@@ -271,6 +275,37 @@ export const permissionRouter = [
         roles: ['stu_assit']
       }
     }
+    ]
+  },
+  {
+    path: "/teacher",
+    component: layout,
+    name: "Teacher",
+    meta: {
+      title: "教师操作",
+      icon: "el-icon-success",
+      roles: ['teacher']
+    },
+    children: [{
+      path: "teaStuList",
+      name: "TeaStuList",
+      component: teaStuList,
+      meta: {
+        title: "管理学生列表",
+        icon: "el-icon-upload",
+        roles: ['teacher']
+      }
+    },
+      {
+        path: "teaClassList",
+        name: "TeaClassList",
+        component: teaClassList,
+        meta: {
+          title: "管理班级列表",
+          icon: "el-icon-upload",
+          roles: ['teacher']
+        }
+      }
     ]
   }
 ]

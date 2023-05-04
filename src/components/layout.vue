@@ -69,8 +69,8 @@ export default {
 }
 
 .app_content {
-  min-height: 500px;
-  margin-left: 300px;
+  /*min-height: 500px;*/
+  margin-left: 15%;
   border: 1px solid #eee;
   box-sizing: border-box;
 }
@@ -85,7 +85,7 @@ export default {
 .slider_container .el-menu {
   color: #333;
   transition: width .28s;
-  width: 300px !important;
+  width: 15% !important;
   height: 100%;
   position: fixed;
   top: 0;

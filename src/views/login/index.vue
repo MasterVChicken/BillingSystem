@@ -52,6 +52,7 @@ export default {
           })
           this.$store.dispatch('login',response.data)
           localStorage.setItem('userRole', this.$store.getters.getUserRole)
+          localStorage.setItem('user_id',this.$store.getters.getUserID)
           if(localStorage.getItem('userRole') === 'teacher'){
             this.$router.push({
               path: '/dashboard/teacher'
