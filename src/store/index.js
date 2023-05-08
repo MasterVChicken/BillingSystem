@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -23,6 +24,16 @@ export default new Vuex.Store({
   },
   //里面定义方法，操作state方发
   mutations: {
+    RESET_ROLE: (state, tr_power) => {
+      if(tr_power === 1){
+        state.userRole = 'checkee'
+        // localStorage.setItem('userRole','checkee')
+      }else if(tr_power === 2){
+        state.userRole = 'manager'
+        // localStorage.setItem('userRole','manager')
+      }
+      setStorage('userRole',state.userRole)
+    },
     SET_USER_ID: (state, user_id) => {
       state.user_id = user_id
       setStorage('user_id',user_id)

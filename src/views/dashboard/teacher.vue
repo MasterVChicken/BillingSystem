@@ -143,6 +143,8 @@ export default {
         this.userInfo.t_name = response.data.t_name
         this.userInfo.t_power = response.data.t_power
         this.teacherPower = this.getTeacherPower()
+        localStorage.setItem('T_grade',response.data.t_grade)
+        localStorage.setItem('T_academyid',response.data.t_academyid)
       })
     },
     getTeacherPower(){

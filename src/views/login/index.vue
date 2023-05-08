@@ -61,7 +61,7 @@ export default {
             this.$router.push({
               path: '/dashboard/admin'
             })
-          }else if(localStorage.getItem('userRole')==='finance'){
+          }else if(localStorage.getItem('userRole')==='finance' || localStorage.getItem('userRole')==='checkee' || localStorage.getItem('userRole')==='manager'){
             this.$router.push({
               path: '/dashboard/finance'
             })

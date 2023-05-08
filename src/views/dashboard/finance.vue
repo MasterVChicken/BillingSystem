@@ -5,7 +5,7 @@
       <el-descriptions-item label="统一认证码">{{this.userInfo.tr_id}}</el-descriptions-item>
       <el-descriptions-item label="所属单位">重庆邮电大学</el-descriptions-item>
       <el-descriptions-item label="职位">{{this.userInfo.tr_pos}}</el-descriptions-item>
-      <el-descriptions-item label="权限等级">{{this.userInfo.tr_power}}</el-descriptions-item>
+      <el-descriptions-item label="权限等级">{{this.power}}</el-descriptions-item>
     </el-descriptions>
     <el-button @click="PWDdialogFormVisible = true">修改密码</el-button>
     <el-dialog title="管理员密码修改" :visible.sync="PWDdialogFormVisible">
@@ -71,7 +71,8 @@ export default {
         tr_id: '',
         tr_name: '',
         tr_pos: ''
-      }
+      },
+      power: ''
     }
   },
   methods: {
@@ -79,10 +80,10 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let params = new URLSearchParams()
-          params.append('T_id', this.$store.getters.getUserID)
-          params.append('T_pwd', this.ruleForm.pass)
+          params.append('Tr_id', this.$store.getters.getUserID)
+          params.append('Tr_pwd', this.ruleForm.pass)
           console.log(params)
-          axios.post('/teacher/update/pwd', params, {
+          axios.post('/treasurer/update/pwd', params, {
             headers: {
               'Access-Control-Allow-Credentials': 'true', //解决session问题
               'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
@@ -133,10 +134,25 @@ export default {
         this.userInfo.tr_name = response.data.tr_name
         this.userInfo.tr_pos = response.data.tr_pos
         this.userInfo.tr_id = response.data.tr_id
+        if(this.userInfo.tr_power !== 0){
+          this.$store.commit('RESET_ROLE',this.userInfo.tr_power)
+        }
+        localStorage.setItem('userRole', this.$store.getters.getUserRole)
+        this.getPower()
       })
+      console.log(this.$store.getters.getUserRole)
+      console.log(localStorage.getItem('userRole'))
       setStorage('Tr_power',this.userInfo.tr_power)
     },
-
+    getPower(){
+      if(this.userInfo.tr_power === 0){
+        this.power =  '会计'
+      }else if(this.userInfo.tr_power === 1){
+        this.power = '审核人员'
+      }else if(this.userInfo.tr_power === 2){
+        this.power = '总管'
+      }
+    }
   },
   created() {
     this.getUserInfo()

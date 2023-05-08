@@ -70,6 +70,7 @@ export default {
 
 .app_content {
   /*min-height: 500px;*/
+  height: 100%;
   margin-left: 15%;
   border: 1px solid #eee;
   box-sizing: border-box;

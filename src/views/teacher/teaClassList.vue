@@ -10,13 +10,13 @@
       </el-table-column>
     </el-table>
     <el-dialog title="班级缴费情况查询" :visible.sync="classVisible">
-      <el-select placeholder="请选择查询学年" ref="mySelect" @change="changeSelect">
+      <el-select placeholder="请选择查询学年" ref="mySelect" @change="changeSelect" v-model="classYear">
         <el-option label="2022-2023" value="2022-2023"></el-option>
         <el-option label="2021-2022" value="2021-2022"></el-option>
         <el-option label="2020-2021" value="2020-2021"></el-option>
         <el-option label="2019-2020" value="2019-2020"></el-option>
       </el-select>
-      <el-table :data="classList">
+      <el-table :data="classList" :row-style="changeRowColor">
         <el-table-column label="姓名" prop="s_name" align="center"></el-table-column>
         <el-table-column label="学号" prop="s_no" align="center"></el-table-column>
         <el-table-column label="年级" prop="s_grade" align="center"></el-table-column>
@@ -158,7 +158,14 @@ export default {
       };
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
-    }
+    },
+    changeRowColor({row,rowIndex}){
+      if(row.flag !== 0){
+        return{
+          color: 'red'
+        }
+      }
+    },
   },
   created() {
     this.getData()

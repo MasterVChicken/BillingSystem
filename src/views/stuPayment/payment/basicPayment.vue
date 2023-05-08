@@ -4,19 +4,16 @@
       <el-breadcrumb-item :to="{path:'/'}">首页</el-breadcrumb-item>
       <el-breadcrumb-item>缴费基础管理</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-table size="small" :data="basicData" highlight-current-row style="width: 100%;" border :span-method="basicSpan" :summary-method="getSummaries" show-summary>
-      <el-table-column align="center" prop="year" label="学年" width="200">
+    <el-table size="small" :data="basicData" style="width: 100%;" border :span-method="basicSpan" :summary-method="getSummaries" show-summary>
+      <el-table-column align="center" prop="year" label="学年" >
       </el-table-column>
-      <el-table-column align="center" prop="type" label="类型" width="200">
+      <el-table-column align="center" prop="type" label="类型" >
       </el-table-column>
-      <el-table-column align="center" prop="money" label="金额" width="200">
+      <el-table-column align="center" prop="money" label="金额" >
       </el-table-column>
-      <el-table-column align="center" prop="flag" label="是否缴纳" width="200" :formatter="flagFormatter">
+      <el-table-column align="center" prop="flag" label="是否缴纳"  :formatter="flagFormatter">
       </el-table-column>
-      <el-table-column align="center" label="缴费操作" width="200" prop="flag">
-        <template slot-scope="scope">
-          <el-button :disabled="(!scope.row.flag) || scope.row.type ==='其他费用'" @click="pay(scope.row)">缴费操作</el-button>
-        </template>
+      <el-table-column align="center" label="年度合计" prop="sum">
       </el-table-column>
     </el-table>
   </div>
@@ -30,7 +27,7 @@ export default {
   data() {
     return {
       // searchByName: '',
-      basicData: []
+      basicData: [],
     }
   },
   methods: {
@@ -50,19 +47,22 @@ export default {
             'year': response.data[i].year,
             'type': '学费',
             'money': response.data[i].xuefei,
-            'flag': response.data[i].xuefeiflag
+            'flag': response.data[i].xuefeiflag,
+            'sum': response.data[i].sum
           })
           this.basicData.push({
             'year': response.data[i].year,
             'type': '住宿费',
             'money': response.data[i].zhusufei,
-            'flag': response.data[i].zhusufeiflag
+            'flag': response.data[i].zhusufeiflag,
+            'sum': response.data[i].sum
           })
           this.basicData.push({
             'year': response.data[i].year,
             'type': '其他费用',
             'money': response.data[i].qitatotal,
-            'flag': response.data[i].qitaflag
+            'flag': response.data[i].qitaflag,
+            'sum': response.data[i].sum
           })
         }
       })
@@ -88,34 +88,19 @@ export default {
           }
         }
       }
-    },
-    pay(data) {
-      let params = new URLSearchParams()
-      let F_id = 0
-      if (data.type === '学费') {
-        F_id = 1
-      } else if (data.type === '住宿费') {
-        F_id = 2
+      if (columnIndex === 4) {
+        if (rowIndex % 3 === 0) {
+          return {
+            rowspan: 3,
+            colspan: 1
+          }
+        } else if (rowIndex % 3 === 1 || rowIndex % 3 === 2) {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
       }
-      params.append('S_no', localStorage.getItem('S_no'))
-      params.append('F_id', F_id)
-      params.append('money', data.money)
-      params.append('remark', data.type)
-      params.append('year', data.year)
-      axios.post('/student/tuijiaofei/jiaofei', params, {
-        headers: {
-          'Access-Control-Allow-Credentials': 'true', //解决session问题
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
-        }
-      }).then((response) => {
-        if (response.data === 1) {
-          this.$message.success('缴费成功')
-        } else if (response.data === 0) {
-          this.$message.error('缴费失败')
-        } else if (response.data === -1) {
-          this.$message.error('未开通自动扣款协议或银行卡余额不足')
-        }
-      })
     },
     getSummaries(param) {
       const {columns, data} = param
@@ -155,6 +140,8 @@ export default {
   },
   created() {
     this.getBasicData()
+  },
+  mounted() {
   }
 }
 </script>

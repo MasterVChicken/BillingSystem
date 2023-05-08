@@ -3,7 +3,7 @@
     <!--面包屑的简易导航-->
     <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-bottom: 10px">
       <el-breadcrumb-item :to="{path:'/'}">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>教师权限管理</el-breadcrumb-item>
+      <el-breadcrumb-item>学生权限管理</el-breadcrumb-item>
     </el-breadcrumb>
     <el-form :inline="true" class="user-search">
       <el-form-item label="简易搜索">
@@ -18,32 +18,31 @@
               v-loading="loading" border element-loading-text="拼命加载中" style="width: 100%;">
       <el-table-column align="center" type="selection" width="50">
       </el-table-column>
-      <el-table-column align="center" sortable prop="t_id" label="ID">
+      <el-table-column align="center" sortable prop="s_no" label="学号">
       </el-table-column>
-      <el-table-column align="center" sortable prop="t_name" label="姓名">
+      <el-table-column align="center" sortable prop="s_name" label="姓名">
       </el-table-column>
-      <el-table-column align="center" sortable prop="t_pos" label="职位">
+      <el-table-column align="center" sortable prop="s_power" label="学生身份" :formatter="stuFormatter">
       </el-table-column>
-      <el-table-column align="center" sortable prop="t_grade" label="年级">
+      <el-table-column align="center" sortable prop="s_grade" label="年级">
       </el-table-column>
-      <el-table-column align="center" sortable prop="dept" label="所属部门">
+      <el-table-column align="center" sortable prop="class_id" label="班级代号">
       </el-table-column>
-      <el-table-column align="center" sortable prop="academy" label="所属学院">
+      <el-table-column align="center" sortable prop="class_name" label="班级名称">
+      </el-table-column>
+      <el-table-column align="center" sortable prop="a_name" label="所属学院">
       </el-table-column>
       <el-table-column align="center" label="修改操作" min-width="200">
         <el-button @click="dialogFormVisible = true">修改权限</el-button>
         <el-button @click="PWDdialogFormVisible = true">修改密码</el-button>
       </el-table-column>
     </el-table>
-    <el-dialog title="教师权限管理" :visible.sync="dialogFormVisible">
+    <el-dialog title="学生权限管理" :visible.sync="dialogFormVisible">
       <el-form :model="PowerForm">
         <el-form-item label="权限等级" label-width="120px">
           <el-select v-model="PowerForm.power" placeholder="请选择对应的权限等级" @change="getSelectedPower">
-            <el-option label="管理员" value="0"></el-option>
-            <!--            <el-option label="学生" value="1"></el-option>-->
-            <el-option label="辅导员" value="2"></el-option>
-            <el-option label="金融人员" value="3"></el-option>
-            <!--            <el-option label="辅导员助理" value="4"></el-option>-->
+            <el-option label="普通学生" value="0"></el-option>
+            <el-option label="辅导员助理" value="1"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -52,7 +51,7 @@
         <el-button type="primary" @click="changUserPower">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="教师密码修改" :visible.sync="PWDdialogFormVisible">
+    <el-dialog title="学生密码修改" :visible.sync="PWDdialogFormVisible">
       <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="密码" prop="pass">
           <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
@@ -73,7 +72,7 @@
 import axios from "axios";
 
 export default {
-  name: "teacherPermission",
+  name: "stuPermission",
   data() {
     let validatePass = (rule, value, callback) => {
       if (value === '') {
@@ -104,9 +103,8 @@ export default {
       dialogFormVisible: false,
       PWDdialogFormVisible: false,
       rowData: {
-        t_name: '',
-        t_id: '',
-        t_power: ''
+        s_no: '',
+        s_power: ''
       },
       PowerForm: {
         power: ''
@@ -130,7 +128,7 @@ export default {
   methods: {
     getdata() {
       this.loading = true
-      axios.get('/admin').then((response) => {
+      axios.get('/admin/student').then((response) => {
         if (response) {
           this.loading = false
           this.userData = response.data
@@ -140,14 +138,14 @@ export default {
     selectChange(val) {
       this.selectedUser = []
       val.forEach(item => {
-        this.selectedUser.push(item.t_id)
+        this.selectedUser.push(item.s_no)
       })
     },
     resetPWD(list) {
-      list.forEach(pwd => {
+      list.forEach(s_no => {
         let params = new URLSearchParams()
-        params.append('T_id', pwd)
-        axios.post('/admin/reset', params, {
+        params.append('S_no', s_no)
+        axios.post('/admin/student/reset', params, {
           headers: {
             'Access-Control-Allow-Credentials': 'true', //解决session问题
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
@@ -193,7 +191,7 @@ export default {
       }
     },
     updateRowData(row) {
-      this.rowData.t_id = row.t_id
+      this.rowData.s_no = row.s_no
       this.rowData.t_name = row.t_name
       this.rowData.t_power = row.t_power
     },
@@ -201,7 +199,7 @@ export default {
       this.PowerForm.power = val
     },
     changUserPower() {
-      if (this.rowData.t_power === this.PowerForm.power) {
+      if (this.rowData.s_power === this.PowerForm.power) {
         this.$message({
           type: "error",
           message: "权限与之前的相同，未进行更改",
@@ -209,9 +207,9 @@ export default {
         })
       } else {
         let params = new URLSearchParams()
-        params.append('T_id', this.rowData.t_id)
-        params.append('T_power', this.PowerForm.power)
-        axios.post('/admin/update', params, {
+        params.append('S_no', this.rowData.s_no)
+        params.append('S_power', this.PowerForm.power)
+        axios.post('/admin/student/update', params, {
           headers: {
             'Access-Control-Allow-Credentials': 'true', //解决session问题
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
@@ -238,9 +236,9 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let params = new URLSearchParams()
-          params.append('T_id', this.rowData.t_id)
-          params.append('T_pwd', this.ruleForm.pass)
-          axios.post('/teacher/update/pwd', params, {
+          params.append('S_no', this.rowData.s_no)
+          params.append('S_pwd', this.ruleForm.pass)
+          axios.post('/student/update/pwd', params, {
             headers: {
               'Access-Control-Allow-Credentials': 'true', //解决session问题
               'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
@@ -274,6 +272,13 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    stuFormatter(row, column){
+      if(row.s_power === 0){
+        return '普通学生'
+      }else if(row.s_power === 1){
+        return  '辅导员助理'
+      }
     }
   }
   ,
