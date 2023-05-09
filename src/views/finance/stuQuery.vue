@@ -10,16 +10,18 @@
       <el-option value="2019-2020">2019-2020</el-option>
     </el-select>
     <el-button @click="search">查询</el-button>
+    <div style="margin-bottom: 20px;margin-top: 20px; align-items: center; width: 100%">年度总体费用</div>
     <el-table size="small" :data="basicData" highlight-current-row style="width: 100%;" border :span-method="basicSpan" :summary-method="getSummaries" show-summary>
-      <el-table-column align="center" prop="year" label="学年" width="200">
+      <el-table-column align="center" prop="year" label="学年">
       </el-table-column>
-      <el-table-column align="center" prop="type" label="类型" width="200">
+      <el-table-column align="center" prop="type" label="类型">
       </el-table-column>
-      <el-table-column align="center" prop="money" label="金额" width="200">
+      <el-table-column align="center" prop="money" label="金额">
       </el-table-column>
-      <el-table-column align="center" prop="flag" label="是否缴纳" width="200" :formatter="flagFormatter">
+      <el-table-column align="center" prop="flag" label="是否缴纳" :formatter="flagFormatter">
       </el-table-column>
     </el-table>
+    <div style="margin-bottom: 20px;margin-top: 20px; align-items: center; width: 100%">年度其他费用</div>
     <el-table :data="otherList" border>
       <el-table-column align="center" prop="s_no" label="学生学号"></el-table-column>
       <el-table-column align="center" prop="s_name" label="学生姓名"></el-table-column>
@@ -91,6 +93,11 @@ export default {
     },
     search(){
       this.queryAllByYear()
+      let now = new Date()
+      let day = now.getDate()
+      let month = now.getMonth()+1
+      let year = now.getFullYear()
+      this.$message.success('Day: ' + day +' Month: '+month+ ' year :'+year)
     },
     flagFormatter(row, column) {
       if (row.flag === 0) {

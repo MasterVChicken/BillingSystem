@@ -40,7 +40,9 @@ const itemList = () => import('@/views/finance/itemList')
 
 const submitReview = () => import('@/views/finance/submitReview')
 
-const finalReview = () => import('@/views/finance/finalReview')
+const finalReview_checkee = () => import('@/views/finance/finalReview_checkee')
+
+const finalReview_manager = () => import('@/views/finance/finalReview_manager')
 
 const teacherPermission = () => import('@/views/permission/teacherPermission')
 
@@ -416,13 +418,23 @@ export const permissionRouter = [
         }
       },
       {
-        path: "finalReview",
-        name: "FinalReview",
-        component: finalReview,
+        path: "finalReview_checkee",
+        name: "FinalReview_checkee",
+        component: finalReview_checkee,
         meta: {
           title: "审核",
           icon: "el-icon-upload",
-          roles: ['finance','checkee','manager']
+          roles: ['checkee']
+        }
+      },
+      {
+        path: "finalReview_manager",
+        name: "FinalReview_manager",
+        component: finalReview_manager,
+        meta: {
+          title: "总管审核",
+          icon: "el-icon-upload",
+          roles: ['manager']
         }
       },
     ]
