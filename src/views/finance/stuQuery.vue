@@ -160,25 +160,25 @@ export default {
     },
     totalPay(data){
       console.log(data.flag)
-      // let params = new URLSearchParams()
-      // let f_id = (data.type==='学费'?'1':'2')
-      // params.append('S_no',this.s_no)
-      // params.append('F_id',f_id)
-      // params.append('remark',data.type)
-      // params.append('money',data.money)
-      // params.append('year',data.year)
-      // axios.post('/treasurer/jiaofei', params, {
-      //   headers: {
-      //     'Access-Control-Allow-Credentials': 'true', //解决session问题
-      //     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
-      //   }
-      // }).then((response)=>{
-      //   if(response.data===1){
-      //     this.$message.success('缴费成功')
-      //   }else{
-      //     this.$message.error('缴费失败')
-      //   }
-      // })
+      let params = new URLSearchParams()
+      let f_id = (data.type==='学费'?'1':'2')
+      params.append('S_no',this.s_no)
+      params.append('F_id',f_id)
+      params.append('remark',data.type)
+      params.append('money',data.money)
+      params.append('year',data.year)
+      axios.post('/treasurer/jiaofei', params, {
+        headers: {
+          'Access-Control-Allow-Credentials': 'true', //解决session问题
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
+        }
+      }).then((response)=>{
+        if(response.data===1){
+          this.$message.success('缴费成功')
+        }else{
+          this.$message.error('缴费失败')
+        }
+      })
     },
     otherPay(){
       let params = new URLSearchParams()
