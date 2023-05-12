@@ -146,7 +146,7 @@ export default {
     },
     getPower(){
       if(this.userInfo.tr_power === 0){
-        this.power =  '会计'
+        this.power = '会计'
       }else if(this.userInfo.tr_power === 1){
         this.power = '审核人员'
       }else if(this.userInfo.tr_power === 2){

@@ -193,6 +193,7 @@ export default {
         this.userInfo.s_age = response.data.s_age
         this.userInfo.s_sex = response.data.s_sex
         localStorage.setItem('S_no',response.data.s_no)
+        localStorage.setItem('S_name',response.data.s_name)
       })
       if(this.$store.getters.getUserRole === 'stu_assit'){
         let params = '?S_no=' + localStorage.getItem('S_no')

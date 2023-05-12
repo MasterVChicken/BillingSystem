@@ -7,13 +7,17 @@
       <el-table-column align="center" prop="money_yingshou" label="应收金额"></el-table-column>
       <el-table-column align="center" prop="date" label="日期"></el-table-column>
     </el-table>
+
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import ReceiptInquiry from "../stuPayment/receiptInquiry.vue";
+import PersonalReceipt from "../../components/personalReceipt.vue";
 export default {
   name: "submitReview",
+  components: {PersonalReceipt, ReceiptInquiry},
   data(){
     return{
       itemList: [{

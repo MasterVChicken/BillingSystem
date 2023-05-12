@@ -4,7 +4,9 @@
       <el-breadcrumb-item :to="{path:'/'}">首页</el-breadcrumb-item>
       <el-breadcrumb-item>缴费基础管理</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-table size="small" :data="basicData" style="width: 100%;" border :span-method="basicSpan" :summary-method="getSummaries" show-summary>
+    <el-table size="small" :data="basicData" style="width: 100%;" border
+              :row-style="{height:60+'px'}"
+              :span-method="basicSpan" :summary-method="getSummaries" show-summary>
       <el-table-column align="center" prop="year" label="学年" >
       </el-table-column>
       <el-table-column align="center" prop="type" label="类型" >

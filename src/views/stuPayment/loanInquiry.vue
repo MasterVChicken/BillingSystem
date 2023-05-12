@@ -1,13 +1,19 @@
 <template>
-  <el-table :data="loanList" border>
-    <el-table-column align="center" prop="year" label="年份"></el-table-column>
-    <el-table-column align="center" prop="money" label="贷款金额"></el-table-column>
-    <el-table-column align="center" prop="flag" label="是否已偿还" :formatter="flagFormatter"></el-table-column>
-  </el-table>
+  <div>
+    <el-table :data="loanList" border>
+      <el-table-column align="center" prop="year" label="年份"></el-table-column>
+      <el-table-column align="center" prop="money" label="贷款金额"></el-table-column>
+      <el-table-column align="center" prop="flag" label="是否已偿还" :formatter="flagFormatter"></el-table-column>
+
+    </el-table>
+
+  </div>
+
 </template>
 
 <script>
 import axios from "axios";
+
 
 export default {
   name: "loanInquiry",
@@ -21,6 +27,7 @@ export default {
     }
   },
   methods: {
+
     getData() {
       let params = new URLSearchParams()
       params.append('S_no', localStorage.getItem('S_no'))

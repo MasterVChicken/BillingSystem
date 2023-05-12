@@ -434,7 +434,8 @@ export const permissionRouter = [
         meta: {
           title: "总管审核",
           icon: "el-icon-upload",
-          roles: ['manager']
+          roles: ['manager' +
+          '']
         }
       },
     ]

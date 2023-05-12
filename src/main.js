@@ -11,9 +11,12 @@ import 'element-ui/lib/theme-chalk/index.css';
 import '@/utils/global'//全局
 // 控制路由表的js文件
 import '@/permission.js'
+import Print from '@/utils/print'
+
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
+Vue.use(Print);
 
 Vue.prototype.$echarts = echarts
 
