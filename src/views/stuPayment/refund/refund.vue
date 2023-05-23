@@ -5,13 +5,13 @@
       <el-breadcrumb-item>退费基础管理</el-breadcrumb-item>
     </el-breadcrumb>
     <el-table size="small" :data="refundData" highlight-current-row style="width: 100%;" border>
-      <el-table-column align="center" prop="year" label="学年" width="400">
+      <el-table-column align="center" prop="year" label="学年">
       </el-table-column>
-      <el-table-column align="center" prop="money" label="退费金额" width="400">
+      <el-table-column align="center" prop="money" label="退费金额">
       </el-table-column>
-      <el-table-column align="center" prop="flag" label="退费状态" width="400" :formatter="flagFormatter">
+      <el-table-column align="center" prop="flag" label="退费状态" :formatter="flagFormatter">
       </el-table-column>
-      <el-table-column align="center" label="缴费操作" width="400" prop="flag">
+      <el-table-column align="center" label="退费操作" prop="flag">
         <template slot-scope="scope">
           <el-button :disabled="scope.row.flag" @click="refund(scope.row)">退费</el-button>
         </template>

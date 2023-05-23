@@ -21,6 +21,9 @@ const loanInquiry = () => import('@/views/stuPayment/loanInquiry')
 
 const otherInquiry = () => import('@/views/stuPayment/otherInquiry')
 
+const discount = () => import('@/views/stuPayment/discount')
+
+const discountInquiry = () => import('@/views/stuPayment/discountInquiry')
 const stuList = () => import('@/views/stuAssit/stuList')
 const classList = () => import('@/views/stuAssit/classList')
 
@@ -31,6 +34,8 @@ const teaClassList = () => import('@/views/teacher/teaClassList')
 const grade = () => import('@/views/teacher/grade')
 
 const academy = () => import('@/views/teacher/academy')
+
+const teaDiscount = () => import('@/views/teacher/teaDiscount')
 
 const stuQuery = () => import('@/views/finance/stuQuery')
 
@@ -284,7 +289,27 @@ export const permissionRouter = [
           icon: "el-icon-upload",
           roles: ['stu', 'stu_assit']
         }
-      }
+      },
+      {
+        path: "discount",
+        name: "Discount",
+        component: discount,
+        meta: {
+          title: "费用减免",
+          icon: "el-icon-upload",
+          roles: ['stu', 'stu_assit']
+        }
+      },
+      {
+        path: "discountInquiry",
+        name: "DiscountInquiry",
+        component: discountInquiry,
+        meta: {
+          title: "费用减免查询",
+          icon: "el-icon-upload",
+          roles: ['stu', 'stu_assit']
+        }
+      },
     ]
   },
   {
@@ -362,6 +387,16 @@ export const permissionRouter = [
         component: academy,
         meta: {
           title: "学院缴费报表",
+          icon: "el-icon-upload",
+          roles: ['teacher']
+        }
+      },
+      {
+        path: "teaDiscount",
+        name: "TeaDiscount",
+        component: teaDiscount,
+        meta: {
+          title: "费用减免管理",
           icon: "el-icon-upload",
           roles: ['teacher']
         }

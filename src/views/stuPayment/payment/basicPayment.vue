@@ -33,7 +33,6 @@ export default {
     }
   },
   methods: {
-
     getBasicData() {
       let params = new URLSearchParams()
       params.append('S_no', localStorage.getItem('S_no'))
@@ -45,6 +44,7 @@ export default {
       }).then((response) => {
         // 转换一下数据
         for (let i = 0; i < response.data.length; i++) {
+          // 对数据进一步划分，细化对象
           this.basicData.push({
             'year': response.data[i].year,
             'type': '学费',
@@ -72,7 +72,7 @@ export default {
     flagFormatter(row, column) {
       if (row.flag === 0) {
         return '已缴纳'
-      } else if (row.flag === 1) {
+      } else{
         return '未缴纳'
       }
     },

@@ -1,7 +1,12 @@
 <template>
   <div>
+    <el-form :inline="true">
+      <el-form-item label="简易搜索">
+        <el-input size="small" v-model="searchByName" placeholder="输入用户名"></el-input>
+      </el-form-item>
+    </el-form >
     <el-button @click="addFeeItem" style="margin-bottom: 20px;">新增收费项</el-button>
-    <el-table :data="list" border @selection-change="selectChange">
+    <el-table :data="list.filter(data => !searchByName || data.s_name.toLowerCase().includes(searchByName.toLowerCase()))" border @selection-change="selectChange">
       <el-table-column type="selection" width="50" align="center"></el-table-column>
       <el-table-column prop="s_no" label="学号" align="center"></el-table-column>
       <el-table-column prop="s_grade" label="年级" align="center"></el-table-column>
@@ -27,10 +32,8 @@
         <el-form-item label="名称" prop="remark" :rules="[{required: true, message: '描述不能为空', trigger: 'blur'}]">
           <el-input type="text" v-model="FeeForm.remark" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="金额" prop="fee"
-                      :rules="[{required: true, message: '金额不能为0', trigger: 'blur'},]">
+        <el-form-item label="金额" prop="fee" :rules="[{required: true, message: '金额不能为0', trigger: 'blur'},]">
           <el-input type="number" v-model="FeeForm.fee" autocomplete="off">
-
           </el-input>
         </el-form-item>
         <el-form-item>
@@ -92,7 +95,8 @@ export default {
         s_no: '',
         s_grade: '',
         s_name: ''
-      }
+      },
+      searchByName: ''
     }
   },
   methods: {

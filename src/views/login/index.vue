@@ -1,11 +1,12 @@
 <template>
   <div class="load_wapper">
-    <el-form class="form_wapper" size="mini" :model="UserForm">
-      <el-form-item label="统一认证码:">
+    <div class="title">学生收费系统</div>
+    <el-form class="form_wapper" size="mini" :model="UserForm" :rules="rules">
+      <el-form-item label="统一认证码:" prop="user">
         <el-input v-model="UserForm.user"></el-input>
       </el-form-item>
-      <el-form-item label="密码:">
-        <el-input v-model="UserForm.password" type="password"  @keyup.enter.native="login"></el-input>
+      <el-form-item label="密码:" prop="password">
+        <el-input v-model="UserForm.password" type="password" @keyup.enter.native="login"></el-input>
       </el-form-item>
       <el-form-item align="center">
         <el-button @click="login" type="primary" plain> 登录</el-button>
@@ -23,14 +24,19 @@ export default {
       UserForm: {
         user: '',
         password: ''
+      },
+      rules: {
+        user: [
+          { required: true, message: '统一认证码不能为空' },
+        ],
+        password: [
+          { required: true, message: '密码不能为空' },
+        ]
       }
     }
   },
   methods: {
     login() {
-      // 这里应该调用接口，将用户信息传给后端，后端查到用户的角色,类似于:
-      // axios.post('/temp',this.formModel).then(res=>{})
-      // 我暂时就不模拟了，直接取
       let params = new URLSearchParams()
       params.append('user_id', this.UserForm.user)
       params.append('user_pwd', this.UserForm.password)
@@ -42,30 +48,30 @@ export default {
       }).then((response) => {
         if (Object.keys(response.data).length == 0) {
           this.$message({
-            type:'warning',
-            message:'请检查账号或者密码是否正确'
+            type: 'warning',
+            message: '请检查账号或者密码是否正确'
           })
         } else {
           this.$message({
-            type:'success',
-            message:'登陆成功'
+            type: 'success',
+            message: '登陆成功'
           })
-          this.$store.dispatch('login',response.data)
+          this.$store.dispatch('login', response.data)
           localStorage.setItem('userRole', this.$store.getters.getUserRole)
-          localStorage.setItem('user_id',this.$store.getters.getUserID)
-          if(localStorage.getItem('userRole') === 'teacher'){
+          localStorage.setItem('user_id', this.$store.getters.getUserID)
+          if (localStorage.getItem('userRole') === 'teacher') {
             this.$router.push({
               path: '/dashboard/teacher'
             })
-          }else if(localStorage.getItem('userRole') === 'admin'){
+          } else if (localStorage.getItem('userRole') === 'admin') {
             this.$router.push({
               path: '/dashboard/admin'
             })
-          }else if(localStorage.getItem('userRole')==='finance' || localStorage.getItem('userRole')==='checkee' || localStorage.getItem('userRole')==='manager'){
+          } else if (localStorage.getItem('userRole') === 'finance' || localStorage.getItem('userRole') === 'checkee' || localStorage.getItem('userRole') === 'manager') {
             this.$router.push({
               path: '/dashboard/finance'
             })
-          }else if(localStorage.getItem('userRole')==='stu' || localStorage.getItem('userRole')==='stu_assit'){
+          } else if (localStorage.getItem('userRole') === 'stu' || localStorage.getItem('userRole') === 'stu_assit') {
             this.$router.push({
               path: '/dashboard/stu'
             })
@@ -105,6 +111,18 @@ export default {
   border: 1px solid #fff;
   color: #fff;
   font-size: 14px;
+}
+
+.title {
+  position: absolute;
+  left: 40%;
+  top: 32%;
+  width: 20%;
+  color: whitesmoke;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px
 }
 
 </style>

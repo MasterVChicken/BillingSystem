@@ -9,7 +9,7 @@
         <div
           style="color: #666666; text-align:center;margin-top:30px; margin-bottom: 10px; display: flex; justify-content: space-between;"
         >
-          <div>票据代码：</div>
+          <div>票据代码：{{}}</div>
           <div>票据号码：{{msg.shouju_id}}</div>
         </div>
         <div
@@ -40,22 +40,13 @@
             <td class="column">备注</td>
           </tr>
           <tr>
-            <td>项目编码</td>
-            <td>项目名称</td>
-            <td>单位</td>
-            <td>数量</td>
+            <td>01000101</td>
+            <td>{{ msg.jiaofeixiang }}</td>
+            <td>元</td>
+            <td>{{ msg.money + '.000'}}</td>
             <td>标准</td>
-            <td>金额</td>
-            <td>备注</td>
-          </tr>
-          <tr>
-            <td>项目编码</td>
-            <td>项目名称</td>
-            <td>单位</td>
-            <td>数量</td>
-            <td>标准</td>
-            <td>金额</td>
-            <td>备注</td>
+            <td>{{ msg.money }}</td>
+            <td>{{this.way}}</td>
           </tr>
         </table>
         <br/>
@@ -72,7 +63,8 @@ export default {
   name: 'personalReceipt',
   data() {
     return {
-      time: ''
+      time: '',
+      way: ''
     };
   },
   props: ["msg","s_name"],
@@ -80,6 +72,7 @@ export default {
   computed: {},
   created() {
     this.getTime()
+    this.modifiedWay()
   },
   methods: {
     // 打印收据
@@ -92,6 +85,13 @@ export default {
       let month = now.getMonth() + 1
       let year = now.getFullYear()
       this.time =  year+'-'+month+'-'+day
+    },
+    modifiedWay(){
+      if (this.msg.flag === 1) {
+        this.way =  '自主系统缴费'
+      } else if (this.msg.flag === 2) {
+        this.way = '通过财务处缴费'
+      }
     }
   }
 };

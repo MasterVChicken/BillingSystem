@@ -17,7 +17,6 @@
       <personal-receipt :msg="propData" :s_name="s_name"></personal-receipt>
     </el-dialog>
   </div>
-
 </template>
 
 <script>

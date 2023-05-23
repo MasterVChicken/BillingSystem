@@ -13,7 +13,7 @@
     </el-form>
     <!--列表-->
     <el-table size="small" @selection-change="selectChange"
-              :data="userData.filter(data => !searchByName || data.t_name.includes(searchByName))"
+              :data="userData.filter(data => !searchByName || data.s_name.includes(searchByName))"
               highlight-current-row @row-click="updateRowData"
               v-loading="loading" border element-loading-text="拼命加载中" style="width: 100%;">
       <el-table-column align="center" type="selection" width="50">
@@ -212,7 +212,8 @@ export default {
         axios.post('/admin/student/update', params, {
           headers: {
             'Access-Control-Allow-Credentials': 'true', //解决session问题
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' //将表单数据传递转化为form-data类型
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            //将表单数据传递转化为form-data类型
           }
         }).then((response) => {
           if (response.data === 1) {
