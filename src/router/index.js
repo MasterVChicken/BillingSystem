@@ -37,6 +37,12 @@ const academy = () => import('@/views/teacher/academy')
 
 const teaDiscount = () => import('@/views/teacher/teaDiscount')
 
+const addedFeeItem = () => import('@/views/teacher/addedFeeItem')
+
+const addedRefundItem = () => import('@/views/teacher/addedRefundItem')
+
+const addRefund = () => import('@/views/teacher/addRefund')
+
 const stuQuery = () => import('@/views/finance/stuQuery')
 
 const weekData = () => import('@/views/finance/weekData')
@@ -48,6 +54,10 @@ const submitReview = () => import('@/views/finance/submitReview')
 const finalReview_checkee = () => import('@/views/finance/finalReview_checkee')
 
 const finalReview_manager = () => import('@/views/finance/finalReview_manager')
+
+const financeRefund = () => import('@/views/finance/financeRefund')
+
+const financeFee = () => import('@/views/finance/financeFee')
 
 const teacherPermission = () => import('@/views/permission/teacherPermission')
 
@@ -401,6 +411,36 @@ export const permissionRouter = [
           roles: ['teacher']
         }
       },
+      {
+        path: "addRefund",
+        name: "AddRefund",
+        component: addRefund,
+        meta: {
+          title: "新增退费",
+          icon: "el-icon-upload",
+          roles: ['teacher']
+        }
+      },
+      {
+        path: "addedRefundItem",
+        name: "AddedRefundItem",
+        component: addedRefundItem,
+        meta: {
+          title: "退费查询",
+          icon: "el-icon-upload",
+          roles: ['teacher']
+        }
+      },
+      {
+        path: "addedFeeItem",
+        name: "AddedFeeItem",
+        component: addedFeeItem,
+        meta: {
+          title: "新增费用查询",
+          icon: "el-icon-upload",
+          roles: ['teacher']
+        }
+      },
     ]
   },
   {
@@ -469,8 +509,27 @@ export const permissionRouter = [
         meta: {
           title: "总管审核",
           icon: "el-icon-upload",
-          roles: ['manager' +
-          '']
+          roles: ['manager']
+        }
+      },
+      {
+        path: "financeRefund",
+        name: "FinanceRefund",
+        component: financeRefund,
+        meta: {
+          title: "退款管理",
+          icon: "el-icon-upload",
+          roles: ['finance','checkee','manager']
+        }
+      },
+      {
+        path: "financeFee",
+        name: "FinanceFee",
+        component: financeFee,
+        meta: {
+          title: "新增费用管理",
+          icon: "el-icon-upload",
+          roles: ['finance','checkee','manager']
         }
       },
     ]
